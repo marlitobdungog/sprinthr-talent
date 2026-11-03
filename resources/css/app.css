@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+
+@plugin 'tailwindcss-animate';
+
+@source '../js/**/*.tsx';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+    --font-sans: 'Avenir Next', 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Avenir Next', 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+    --color-canvas: #f4f6fa;
+    --color-ink: #14233c;
+    --color-cobalt: #4268ed;
+    --color-lime: #c8ef63;
+    --color-line: #e5e9f0;
+    --color-background: #f4f6fa;
+    --color-foreground: #14233c;
+    --color-card: #ffffff;
+    --color-card-foreground: #14233c;
+    --color-popover: #ffffff;
+    --color-popover-foreground: #14233c;
+    --color-primary: #4268ed;
+    --color-primary-foreground: #ffffff;
+    --color-secondary: #edf0f5;
+    --color-secondary-foreground: #14233c;
+    --color-muted: #f1f3f7;
+    --color-muted-foreground: #64748b;
+    --color-accent: #edf0f5;
+    --color-accent-foreground: #14233c;
+    --color-destructive: #dc2626;
+    --color-destructive-foreground: #ffffff;
+    --color-border: #e5e9f0;
+    --color-input: #e5e9f0;
+    --color-ring: #4268ed;
+    --radius: 0.75rem;
+    --shadow-card: 0 8px 28px -20px rgba(20, 35, 60, 0.2);
+}
+
+@layer base {
+    *, ::before, ::after { border-color: var(--color-slate-200, currentColor); }
+    html { scroll-behavior: smooth; }
+    body { background: #f4f6fa; color: #14233c; font-family: 'Avenir Next', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; }
+    button, input, select, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid rgba(66, 104, 237, 0.45); outline-offset: 2px; }
+}
+
+.page-grid {
+    background-image: radial-gradient(rgba(66, 104, 237, 0.09) 1px, transparent 1px);
+    background-position: 0 0;
+    background-size: 18px 18px;
+}

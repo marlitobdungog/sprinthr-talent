@@ -1,0 +1,21 @@
+import CandidateLayout from '@/layouts/candidate-layout';
+import { EmptyState, PageHeading, Panel, secondaryButton } from '@/components/portal';
+import { Head, router } from '@inertiajs/react';
+import { ArrowRight, BriefcaseBusiness, CalendarClock, Check, Clock3, X } from 'lucide-react';
+
+type Invitation = { id: string; employer_name: string; role_title: string; role_summary: string | null; status: string; expires_at: string | null; responded_at: string | null; created_at: string };
+
+export default function Invitations({ invitations }: { invitations: Invitation[] }) {
+    const pending = invitations.filter((item) => item.status === 'pending');
+    const history = invitations.filter((item) => item.status !== 'pending');
+    const respond = (invitation: Invitation, decision: 'accepted' | 'declined') => {
+        const action = decision === 'accepted' ? 'accept' : 'decline';
+        if (window.confirm(`${action === 'accept' ? 'Accept' : 'Decline'} the invitation from ${invitation.employer_name}?`)) router.patch(`/invitations/${invitation.id}`, { decision }, { preserveScroll: true });
+    };
+
+    return <CandidateLayout title="Invitations"><Head title="Invitations" />
+        <PageHeading eyebrow="YOU DECIDE WHAT HAPPENS NEXT" title="Invitations" description="Review who is reaching out and what role they have in mind. You can accept or decline each invitation." />
+        {pending.length ? <div className="space-y-4">{pending.map((invitation) => <Panel key={invitation.id} className="border-cobalt/15"><div className="flex flex-col gap-5 sm:flex-row sm:items-start"><span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-[#E8EDFF] text-cobalt"><BriefcaseBusiness size={21} /></span><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-[#EFF8D9] px-2.5 py-1 text-[9px] font-bold tracking-wide text-[#4D6812]">NEW INVITATION</span>{invitation.expires_at && <span className="inline-flex items-center gap-1 text-[10px] text-slate-400"><CalendarClock size={12} />Until {new Date(invitation.expires_at).toLocaleDateString()}</span>}</div><h2 className="mt-3 text-lg font-semibold">{invitation.role_title}</h2><p className="mt-1 text-sm font-medium text-slate-600">{invitation.employer_name}</p>{invitation.role_summary && <p className="mt-3 max-w-2xl whitespace-pre-line text-xs leading-5 text-slate-500">{invitation.role_summary}</p>}<div className="mt-4 flex flex-wrap gap-2"><button type="button" onClick={() => respond(invitation, 'accepted')} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-cobalt px-4 text-xs font-semibold text-white hover:bg-blue-700"><Check size={14} />Accept invitation</button><button type="button" onClick={() => respond(invitation, 'declined')} className={secondaryButton}><X size={14} />Decline</button></div><p className="mt-3 text-[10px] leading-5 text-slate-400">Accepting lets the employer know you are interested. Your personal contact details remain private until a separate sharing step.</p></div></div></Panel>)}</div> : <Panel><EmptyState icon={<BriefcaseBusiness size={19} />} title="No invitations to review" description="Invitations will appear here when an employer is interested in your profile. You can decide what to do with each one." action={<a href="/privacy" className="inline-flex items-center gap-1.5 text-xs font-semibold text-cobalt">Review discovery settings <ArrowRight size={14} /></a>} /></Panel>}
+        {history.length > 0 && <section className="mt-8"><div className="mb-4 flex items-center gap-2"><Clock3 size={15} className="text-slate-400" /><h2 className="text-sm font-semibold">Past invitations</h2></div><div className="space-y-3">{history.map((invitation) => <Panel key={invitation.id} className="flex items-center gap-3 py-4"><span className="grid size-9 place-items-center rounded-xl bg-slate-100 text-slate-500"><BriefcaseBusiness size={16} /></span><div className="min-w-0 flex-1"><p className="truncate text-xs font-semibold">{invitation.role_title}</p><p className="mt-1 truncate text-[10px] text-slate-500">{invitation.employer_name}</p></div><span className="rounded-full bg-slate-100 px-2.5 py-1 text-[9px] font-semibold capitalize text-slate-500">{invitation.status}</span></Panel>)}</div></section>}
+    </CandidateLayout>;
+}

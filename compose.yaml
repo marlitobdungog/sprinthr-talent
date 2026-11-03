@@ -1,0 +1,171 @@
+name: sprinthr-talent
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    working_dir: /var/www/html
+    init: true
+    ports:
+      - "8180:80"
+    volumes:
+      - .:/var/www/html
+      - composer-vendor:/var/www/html/vendor
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8180
+      TALENT_LOCAL_AUTH_ENABLED: "true"
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: sprinthr_talent
+      DB_USERNAME: talent_app
+      DB_PASSWORD: talent_local_password
+      SESSION_DRIVER: redis
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MAIL_MAILER: log
+      FILESYSTEM_DISK: local
+      TALENT_RESUME_DISK: local
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost/up >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 60s
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    working_dir: /var/www/html
+    init: true
+    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90"]
+    volumes:
+      - .:/var/www/html
+      - composer-vendor:/var/www/html/vendor
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8180
+      TALENT_LOCAL_AUTH_ENABLED: "true"
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: sprinthr_talent
+      DB_USERNAME: talent_app
+      DB_PASSWORD: talent_local_password
+      SESSION_DRIVER: redis
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MAIL_MAILER: log
+      FILESYSTEM_DISK: local
+      TALENT_RESUME_DISK: local
+    depends_on:
+      app:
+        condition: service_healthy
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    working_dir: /var/www/html
+    init: true
+    command: ["php", "artisan", "schedule:work"]
+    volumes:
+      - .:/var/www/html
+      - composer-vendor:/var/www/html/vendor
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8180
+      TALENT_LOCAL_AUTH_ENABLED: "true"
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: sprinthr_talent
+      DB_USERNAME: talent_app
+      DB_PASSWORD: talent_local_password
+      SESSION_DRIVER: redis
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MAIL_MAILER: log
+      FILESYSTEM_DISK: local
+      TALENT_RESUME_DISK: local
+    depends_on:
+      app:
+        condition: service_healthy
+
+  vite:
+    image: node:22-alpine
+    working_dir: /var/www/html
+    init: true
+    command:
+      - sh
+      - -lc
+      - >-
+        if [ ! -x node_modules/.bin/vite ] || [ package-lock.json -nt node_modules/.install-stamp ]; then
+          npm ci --no-audit && touch node_modules/.install-stamp;
+        fi;
+        npm run dev
+    ports:
+      - "5175:5173"
+    volumes:
+      - .:/var/www/html
+      - node-modules:/var/www/html/node_modules
+    environment:
+      APP_URL: http://localhost:8180
+      VITE_HMR_CLIENT_PORT: 5175
+      VITE_DEV_SERVER_ORIGIN: http://localhost:5175
+      VITE_CORS_ORIGIN: http://localhost:8180
+      VITE_APP_NAME: SprintHR Talent
+    depends_on:
+      app:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: sprinthr_talent
+      POSTGRES_USER: talent_app
+      POSTGRES_PASSWORD: talent_local_password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U talent_app -d sprinthr_talent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  composer-vendor:
+  node-modules:
+  postgres-data:
+  redis-data:

@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class CandidateConsentEvent extends Model
+{
+    public $timestamps = false;
+
+    protected $fillable = ['purpose', 'action', 'policy_version', 'created_at'];
+
+    protected function casts(): array
+    {
+        return ['created_at' => 'datetime'];
+    }
+
+    public function candidate(): BelongsTo
+    {
+        return $this->belongsTo(Candidate::class);
+    }
+}
