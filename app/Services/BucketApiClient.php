@@ -13,8 +13,6 @@ class BucketApiClient
 {
     public function uploadResume(UploadedFile $file, string $candidateId, string $originalFilename): string
     {
-        $this->assertR2DeleteEnabled();
-
         $extension = $file->extension();
         $originalBasename = pathinfo($originalFilename, PATHINFO_FILENAME);
         $safeBasename = preg_replace('/[^A-Za-z0-9._-]+/', '_', $originalBasename) ?: 'resume';

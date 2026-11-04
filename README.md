@@ -35,9 +35,9 @@ The starter's password-based registration and login are enabled only when `APP_E
 
 ## Resume storage
 
-Uploads accept PDF and DOCX files up to 10 MB. The default `local` filesystem stores them under Laravel's private storage root. The owner-only download route checks the authenticated candidate and never returns a public object URL.
+Uploads accept PDF and DOCX files up to 10 MB. By default, resume uploads go through the Bucket API to the private R2 bucket configured by `BUCKET_API_URL`, `BUCKET_API_KEY`, and `BUCKET_NAME`. Keep `TALENT_RESUME_DISK=bucket-api-r2`. The owner-only download route checks the authenticated candidate before requesting a one-hour signed URL.
 
-For private R2 storage, configure the existing S3-compatible Laravel disk and set `TALENT_RESUME_DISK=s3`, with private bucket credentials and an R2 endpoint. Keep public access and public ACLs disabled. Resume scanning and extraction are not connected yet; the app records `awaiting_parser` and tells applicants to enter profile details manually.
+For local development without R2, set `TALENT_RESUME_DISK=local`. Resume scanning and extraction are not connected yet; the app records `awaiting_parser` and tells applicants to enter profile details manually.
 
 ## Current implementation boundary
 

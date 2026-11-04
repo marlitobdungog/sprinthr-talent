@@ -31,7 +31,10 @@ services:
       REDIS_PORT: 6379
       MAIL_MAILER: log
       FILESYSTEM_DISK: local
-      TALENT_RESUME_DISK: local
+      TALENT_RESUME_DISK: bucket-api-r2
+      BUCKET_API_URL: ${BUCKET_API_URL:-https://bucket.sprinthrapis.com}
+      BUCKET_API_KEY: ${BUCKET_API_KEY:-}
+      BUCKET_NAME: ${BUCKET_NAME:-sprinthr-talent}
     depends_on:
       db:
         condition: service_healthy
@@ -73,7 +76,10 @@ services:
       REDIS_PORT: 6379
       MAIL_MAILER: log
       FILESYSTEM_DISK: local
-      TALENT_RESUME_DISK: local
+      TALENT_RESUME_DISK: bucket-api-r2
+      BUCKET_API_URL: ${BUCKET_API_URL:-https://bucket.sprinthrapis.com}
+      BUCKET_API_KEY: ${BUCKET_API_KEY:-}
+      BUCKET_NAME: ${BUCKET_NAME:-sprinthr-talent}
     depends_on:
       app:
         condition: service_healthy
@@ -107,7 +113,10 @@ services:
       REDIS_PORT: 6379
       MAIL_MAILER: log
       FILESYSTEM_DISK: local
-      TALENT_RESUME_DISK: local
+      TALENT_RESUME_DISK: bucket-api-r2
+      BUCKET_API_URL: ${BUCKET_API_URL:-https://bucket.sprinthrapis.com}
+      BUCKET_API_KEY: ${BUCKET_API_KEY:-}
+      BUCKET_NAME: ${BUCKET_NAME:-sprinthr-talent}
     depends_on:
       app:
         condition: service_healthy
