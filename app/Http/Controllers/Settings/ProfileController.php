@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
+use App\Services\ResumeStorage;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -44,7 +44,7 @@ class ProfileController extends Controller
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request, ResumeStorage $resumeStorage): RedirectResponse
     {
         $request->validate([
             'password' => ['required', 'current_password'],
@@ -54,13 +54,13 @@ class ProfileController extends Controller
 
         $resume = $user->candidate?->resume()->first();
 
+        if ($resume) {
+            $resumeStorage->delete($resume->storage_disk, $resume->private_object_key);
+        }
+
         Auth::logout();
 
         $user->delete();
-
-        if ($resume) {
-            Storage::disk($resume->storage_disk)->delete($resume->private_object_key);
-        }
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

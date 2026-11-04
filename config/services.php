@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'bucket_api' => [
+        'url' => env('BUCKET_API_URL', 'https://bucket.sprinthrapis.com'),
+        'key' => env('BUCKET_API_KEY'),
+        'bucket' => env('BUCKET_NAME', 'sprinthr-talent'),
+    ],
+
 ];
