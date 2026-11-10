@@ -1,0 +1,32 @@
+{
+	"$schema": "../../node_modules/wrangler/config-schema.json",
+	"name": "sprinthr-talent",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-11-10",
+	"workers_dev": true,
+	"preview_urls": false,
+	"containers": [
+		{
+			"class_name": "TalentApp",
+			"image": "../../Dockerfile.cloudflare",
+			"max_instances": 2
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "TALENT_APP",
+				"class_name": "TalentApp"
+			}
+		]
+	},
+	"exports": {
+		"TalentApp": {
+			"type": "durable-object",
+			"storage": "sqlite"
+		}
+	},
+	"vars": {
+		"CONTAINER_INSTANCE": "lite"
+	}
+}

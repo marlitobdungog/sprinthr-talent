@@ -30,3 +30,6 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+
+# Cloudflare production secrets
+deployments/cloudflare/.env.production

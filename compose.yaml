@@ -18,11 +18,12 @@ services:
       APP_URL: http://localhost:8180
       TALENT_LOCAL_AUTH_ENABLED: "true"
       DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: sprinthr_talent
-      DB_USERNAME: talent_app
-      DB_PASSWORD: talent_local_password
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_DATABASE: ${DB_DATABASE:-sprinthr_talent}
+      DB_USERNAME: ${DB_USERNAME:-talent_app}
+      DB_PASSWORD: ${DB_PASSWORD:-talent_local_password}
+      DB_SSLMODE: ${DB_SSLMODE:-prefer}
       SESSION_DRIVER: redis
       CACHE_STORE: redis
       QUEUE_CONNECTION: redis
@@ -38,6 +39,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+        required: false
       redis:
         condition: service_healthy
 
@@ -58,11 +60,12 @@ services:
       APP_URL: http://localhost:8180
       TALENT_LOCAL_AUTH_ENABLED: "true"
       DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: sprinthr_talent
-      DB_USERNAME: talent_app
-      DB_PASSWORD: talent_local_password
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_DATABASE: ${DB_DATABASE:-sprinthr_talent}
+      DB_USERNAME: ${DB_USERNAME:-talent_app}
+      DB_PASSWORD: ${DB_PASSWORD:-talent_local_password}
+      DB_SSLMODE: ${DB_SSLMODE:-prefer}
       SESSION_DRIVER: redis
       CACHE_STORE: redis
       QUEUE_CONNECTION: redis
@@ -80,6 +83,7 @@ services:
         condition: service_completed_successfully
       db:
         condition: service_healthy
+        required: false
       redis:
         condition: service_healthy
     healthcheck:
@@ -105,11 +109,12 @@ services:
       APP_URL: http://localhost:8180
       TALENT_LOCAL_AUTH_ENABLED: "true"
       DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: sprinthr_talent
-      DB_USERNAME: talent_app
-      DB_PASSWORD: talent_local_password
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_DATABASE: ${DB_DATABASE:-sprinthr_talent}
+      DB_USERNAME: ${DB_USERNAME:-talent_app}
+      DB_PASSWORD: ${DB_PASSWORD:-talent_local_password}
+      DB_SSLMODE: ${DB_SSLMODE:-prefer}
       SESSION_DRIVER: redis
       CACHE_STORE: redis
       QUEUE_CONNECTION: redis
@@ -142,11 +147,12 @@ services:
       APP_URL: http://localhost:8180
       TALENT_LOCAL_AUTH_ENABLED: "true"
       DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: sprinthr_talent
-      DB_USERNAME: talent_app
-      DB_PASSWORD: talent_local_password
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_DATABASE: ${DB_DATABASE:-sprinthr_talent}
+      DB_USERNAME: ${DB_USERNAME:-talent_app}
+      DB_PASSWORD: ${DB_PASSWORD:-talent_local_password}
+      DB_SSLMODE: ${DB_SSLMODE:-prefer}
       SESSION_DRIVER: redis
       CACHE_STORE: redis
       QUEUE_CONNECTION: redis
@@ -191,6 +197,7 @@ services:
         condition: service_healthy
 
   db:
+    profiles: ["local-db"]
     image: postgres:17-alpine
     ports:
       - "5433:5432"
