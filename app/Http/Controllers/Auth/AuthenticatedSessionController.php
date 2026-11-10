@@ -20,6 +20,7 @@ class AuthenticatedSessionController extends Controller
     {
         return Inertia::render('auth/login', [
             'canResetPassword' => Route::has('password.request'),
+            'privacyPolicyUrl' => config('talent.privacy_policy_url'),
             'status' => $request->session()->get('status'),
         ]);
     }

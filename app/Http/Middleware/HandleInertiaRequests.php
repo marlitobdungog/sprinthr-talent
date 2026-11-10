@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'localAuthEnabled' => config('talent.local_auth_enabled'),
+            'googleEnabled' => filled(config('services.google.client_id')) && filled(config('services.google.client_secret')),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $request->user(),

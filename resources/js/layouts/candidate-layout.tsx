@@ -1,5 +1,5 @@
 import { Link, router, usePage } from '@inertiajs/react';
-import { Bell, BriefcaseBusiness, ChevronDown, CircleUserRound, FileText, House, LockKeyhole, LogOut, Menu, Sparkles, UserRound, X } from 'lucide-react';
+import { Bell, BriefcaseBusiness, ChevronDown, CircleUserRound, FileText, House, LockKeyhole, LogOut, Menu, UserRound, X } from 'lucide-react';
 import { type PropsWithChildren, useState } from 'react';
 import { type SharedData } from '@/types';
 
@@ -36,8 +36,8 @@ export default function CandidateLayout({ children, title, eyebrow = 'YOUR TALEN
         <div className="min-h-screen bg-canvas text-ink">
             <aside className="fixed inset-y-0 left-0 z-30 hidden w-[248px] flex-col bg-ink px-4 py-5 text-white lg:flex">
                 <Link href="/dashboard" className="mb-11 flex items-center gap-3 px-2">
-                    <span className="grid size-10 place-items-center rounded-xl bg-lime text-ink"><Sparkles size={21} strokeWidth={2.1} /></span>
-                    <span className="leading-tight"><strong className="block text-[15px] font-semibold tracking-tight">SprintHR</strong><span className="text-[11px] tracking-[0.16em] text-slate-400">TALENT</span></span>
+                    <img src="https://media.gleent.com/logos/Logo-SprintHR-white-text.png" alt="SprintHR" className="h-8 w-auto" />
+                    <span className="border-l border-white/20 pl-3 text-[11px] font-medium tracking-[0.16em] text-white/70 uppercase">Talent</span>
                 </Link>
                 <p className="mb-3 px-3 text-[10px] font-semibold tracking-[0.18em] text-slate-500">YOUR SPACE</p>
                 <nav className="space-y-1">{links()}</nav>
