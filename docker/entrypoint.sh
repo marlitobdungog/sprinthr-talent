@@ -19,6 +19,4 @@ fi
 mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
 chmod -R ug+rwX storage bootstrap/cache
 
-php artisan migrate --force
-
 exec "$@"

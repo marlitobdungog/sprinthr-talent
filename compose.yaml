@@ -1,6 +1,46 @@
 name: sprinthr-talent
 
 services:
+  migrate:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    working_dir: /var/www/html
+    init: true
+    command: ["php", "artisan", "migrate", "--force"]
+    restart: "no"
+    volumes:
+      - .:/var/www/html
+      - composer-vendor:/var/www/html/vendor
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8180
+      TALENT_LOCAL_AUTH_ENABLED: "true"
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: sprinthr_talent
+      DB_USERNAME: talent_app
+      DB_PASSWORD: talent_local_password
+      SESSION_DRIVER: redis
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MAIL_MAILER: log
+      FILESYSTEM_DISK: local
+      TALENT_RESUME_DISK: bucket-api-r2
+      BUCKET_API_URL: ${BUCKET_API_URL:-https://bucket.sprinthrapis.com}
+      BUCKET_API_KEY: ${BUCKET_API_KEY:-}
+      BUCKET_NAME: ${BUCKET_NAME:-sprinthr-talent}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
   app:
     build:
       context: .
@@ -36,6 +76,8 @@ services:
       BUCKET_API_KEY: ${BUCKET_API_KEY:-}
       BUCKET_NAME: ${BUCKET_NAME:-sprinthr-talent}
     depends_on:
+      migrate:
+        condition: service_completed_successfully
       db:
         condition: service_healthy
       redis:
