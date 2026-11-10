@@ -8,8 +8,18 @@
 	"containers": [
 		{
 			"class_name": "TalentApp",
-			"image": "../../Dockerfile.cloudflare",
-			"max_instances": 2
+			"scheduling_policy": "durable_object",
+			"observability": {
+				"logs": {
+					"enabled": true
+				}
+			},
+			"images": {
+				"base": {
+					"dockerfile": "../../Dockerfile.cloudflare",
+					"build_context": "../.."
+				}
+			}
 		}
 	],
 	"durable_objects": {
@@ -26,7 +36,10 @@
 			"storage": "sqlite"
 		}
 	},
+	"version_metadata": {
+		"binding": "CF_VERSION_METADATA"
+	},
 	"vars": {
-		"CONTAINER_INSTANCE": "lite"
+		"CONTAINER_INSTANCE": "standard-1"
 	}
 }
